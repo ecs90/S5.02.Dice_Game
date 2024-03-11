@@ -18,7 +18,7 @@ public abstract class MatchRepoImp implements MatchRepository{
         if (!players.isEmpty()){
             //TODO chatgptear como convertir a lambda
             for (int i = 0; i < players.size(); i++){
-                if (players.get(i).isResult()){
+                if (players.get(i).isWin()){
                     victories++;
                 }
             }

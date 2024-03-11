@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Match {
     @Id
     long matchID;
-    boolean result;
+    boolean win;
     long playerID;
     int score;
     int dice1;
@@ -25,8 +25,11 @@ public class Match {
 
     //(6-1) is the limits, meaning this function fluctuates between [1,6]
     //Second +1 indicates that the value is deplaced from origin by 1
-    private int throwDice(){
+    public int throwDice(){
         return (int) (Math.floor(Math.random()*(6-1+1)+1));
     }
 
+    public void setWin() {
+        this.win = score == 7;
+    }
 }

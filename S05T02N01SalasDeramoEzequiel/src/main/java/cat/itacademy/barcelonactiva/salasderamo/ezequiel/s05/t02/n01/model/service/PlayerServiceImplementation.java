@@ -1,6 +1,7 @@
 package cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.service;
 
 
+import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.EntityDTOSwapper;
 import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.domain.Player;
 import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.dto.PlayerDTO;
 import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.repository.MatchRepository;
@@ -43,29 +44,11 @@ public class PlayerServiceImplementation implements PlayerService{
     }
 
     @Override
-    public HashMap<PlayerDTO, Float> playerSuccessHashM(){
-        HashMap<PlayerDTO, Float> hashMap = new HashMap<>();
+    public HashMap<Player, Float> playerSuccessHashM(){
+        HashMap<Player, Float> hashMap = new HashMap<>();
         for (Player player : findAll()){
-            
+            hashMap.put(player, calculateSuccessRate(player.getPk_playerID()));
         }
-    }
-
-    @Override
-    public Player DTOtoEntity(PlayerDTO playerDTO){
-        return new Player(playerDTO.getName(), playerDTO.getSurename(), playerDTO.getUser(),
-                playerDTO.getPassword());
-    }
-
-    @Override
-    public Player DTOtoEntityWID(PlayerDTO playerDTO){
-        return new Player(playerDTO.getPk_playerID(), playerDTO.getName(), playerDTO.getSurename(), playerDTO.getUser(),
-                playerDTO.getPassword(), playerDTO.getCreationDate());
-    }
-
-    @Override
-    public PlayerDTO entityToDTO(Player player){
-        return new PlayerDTO(player.getPk_playerID(), player.getName(), player.getSurename(),
-                player.getUser(), player.getPassword(), player.getCreationDate(),
-                calculateSuccessRate(player.getPk_playerID()));
+        return hashMap;
     }
 }
