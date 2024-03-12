@@ -10,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerServiceImplementation implements PlayerService{
@@ -44,11 +45,22 @@ public class PlayerServiceImplementation implements PlayerService{
     }
 
     @Override
-    public HashMap<Player, Float> playerSuccessHashM(){
-        HashMap<Player, Float> hashMap = new HashMap<>();
+    public List<PlayerDTO> playerSuccessList(){
+        /*List<PlayerDTO> list = new ArrayList<>();
         for (Player player : findAll()){
-            hashMap.put(player, calculateSuccessRate(player.getPk_playerID()));
+            PlayerDTO playerDTO = EntityDTOSwapper.entityToDTO(player);
+            list.add(playerDTO);
         }
-        return hashMap;
+        return list;*/
+        return findAll().stream()
+                .map(EntityDTOSwapper::entityToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PlayerDTO> rearrangeToWinningPositionsFirst(List<PlayerDTO> playerDTOS) {
+        return playerDTOS.stream()
+                .sorted(Comparator.comparingDouble(PlayerDTO::getSuccessRate).reversed())
+                .collect(Collectors.toList());
     }
 }

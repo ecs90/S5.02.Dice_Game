@@ -9,15 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.List;
 
 /*POST: /players: crea un jugador/a.
 PUT /players: modifica el nom del jugador/a.
 GET /players/: retorna el llistat de tots  els jugadors/es del sistema amb el seu  percentatge mitjà d’èxits.
 
-TODO GET /players/ranking: retorna el ranking mig de tots els jugadors/es del sistema. És a dir, el  percentatge mitjà d’èxits.
-TODO GET /players/ranking/loser: retorna el jugador/a  amb pitjor percentatge d’èxit.
-TODO GET /players/ranking/winner: retorna el  jugador amb pitjor percentatge d’èxit. */
+GET /players/ranking: retorna el ranking mig de tots els jugadors/es del sistema. És a dir, el  percentatge mitjà d’èxits.
+GET /players/ranking/loser: retorna el jugador/a  amb pitjor percentatge d’èxit.
+GET /players/ranking/winner: retorna el  jugador amb pitjor percentatge d’èxit. */
 @RestController
 @RequestMapping(name = "/players")
 public class PlayerController {
@@ -44,7 +44,28 @@ public class PlayerController {
     }
 
     @GetMapping("/")
-    private ResponseEntity<HashMap<Player, Float>> allPSuccessPercentage(){
-        return new ResponseEntity<>(playerService.playerSuccessHashM(), HttpStatus.OK);
+    private ResponseEntity<List<PlayerDTO>> allPSuccessPercentage(){
+        return new ResponseEntity<>(playerService.playerSuccessList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/ranking")
+    private ResponseEntity<List<PlayerDTO>> getRanking(){
+        List<PlayerDTO> playerDTOS = playerService
+                .rearrangeToWinningPositionsFirst(playerService.playerSuccessList());
+        return new ResponseEntity<>(playerDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/ranking/loser")
+    private ResponseEntity<PlayerDTO> getMostLoser(){
+        List<PlayerDTO> playerDTOS = getRanking().getBody();
+        assert playerDTOS != null;
+        return new ResponseEntity<>(playerDTOS.get(playerDTOS.size()-1), HttpStatus.OK);
+    }
+
+    @GetMapping("/ranking/winner")
+    private ResponseEntity<PlayerDTO> getMostWinner(){
+        List<PlayerDTO> playerDTOS = getRanking().getBody();
+        assert playerDTOS != null;
+        return new ResponseEntity<>(playerDTOS.get(0), HttpStatus.OK);
     }
 }

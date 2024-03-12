@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class PlayerDTO {
     private Long pk_playerID;
     private String name;
-    private String surename;
     private String user;
     private String password;
     private LocalDateTime creationDate;

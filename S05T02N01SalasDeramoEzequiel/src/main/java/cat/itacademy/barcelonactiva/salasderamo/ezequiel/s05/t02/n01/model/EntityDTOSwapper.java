@@ -8,17 +8,17 @@ public class EntityDTOSwapper {
     private static PlayerService playerService;
 
     public static Player DTOtoEntity(PlayerDTO playerDTO){
-        return new Player(playerDTO.getName(), playerDTO.getSurename(), playerDTO.getUser(),
+        return new Player(playerDTO.getName(), playerDTO.getUser(),
                 playerDTO.getPassword());
     }
 
     public static Player DTOtoEntityWID(PlayerDTO playerDTO){
-        return new Player(playerDTO.getPk_playerID(), playerDTO.getName(), playerDTO.getSurename(), playerDTO.getUser(),
+        return new Player(playerDTO.getPk_playerID(), playerDTO.getName(), playerDTO.getUser(),
                 playerDTO.getPassword(), playerDTO.getCreationDate());
     }
 
     public static PlayerDTO entityToDTO(Player player){
-        return new PlayerDTO(player.getPk_playerID(), player.getName(), player.getSurename(),
+        return new PlayerDTO(player.getPk_playerID(), player.getName(),
                 player.getUser(), player.getPassword(), player.getCreationDate(),
                 playerService.calculateSuccessRate(player.getPk_playerID()));
     }

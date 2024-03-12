@@ -18,9 +18,7 @@ public class Player {
     private long pk_playerID;
     @Column(name = "name", unique = true)
     private String name;
-    @Column(name = "surename")
-    private String surename;
-    @Column(name = "user")
+    @Column(name = "user", unique = true)
     private String user;
     @Column(name = "password")
     private String password;
@@ -28,9 +26,8 @@ public class Player {
     private LocalDateTime creationDate;
 
 
-    public Player(String name, String surename, String user, String password) {
+    public Player(String name, String user, String password) {
         this.name = name;
-        this.surename = surename;
         this.user = user;
         this.password = password;
         this.creationDate = LocalDateTime.now();
