@@ -1,4 +1,4 @@
-package cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.service;
+package cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.service.interfaces;
 
 
 import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.domain.Match;
@@ -12,4 +12,7 @@ public interface MatchService {
 
     void deleteMatches(Long id);
     List<Match> findByPlayerId(Long id);
+    float calculateSuccessRate(long playerID);
+
+    int countVictories(long playerID);
 }

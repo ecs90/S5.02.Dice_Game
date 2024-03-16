@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class PlayerDTO {
-    private Long pk_playerID;
+    private Long id;
     private String name;
     private String user;
     private String password;
     private LocalDateTime creationDate;
-    private float successRate;
-
+    private Float successRate;
+    private String token;
 }

@@ -1,9 +1,9 @@
 package cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.controllers;
 
-import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.EntityDTOSwapper;
+import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.EntityDTOSMapper;
 import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.domain.Player;
 import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.dto.PlayerDTO;
-import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.service.PlayerService;
+import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.service.interfaces.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,51 +19,53 @@ GET /players/ranking: retorna el ranking mig de tots els jugadors/es del sistema
 GET /players/ranking/loser: retorna el jugador/a  amb pitjor percentatge d’èxit.
 GET /players/ranking/winner: retorna el  jugador amb pitjor percentatge d’èxit. */
 @RestController
-@RequestMapping(name = "/players")
+@RequestMapping("/players")
 public class PlayerController {
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private EntityDTOSMapper mapper;
 
     @PostMapping
-    private ResponseEntity<PlayerDTO> addPlayer(@RequestBody PlayerDTO playerDTO){
-        Player player = EntityDTOSwapper.DTOtoEntity(playerDTO);
+    public ResponseEntity<PlayerDTO> signUp(@RequestBody PlayerDTO playerDTO){
+        Player player = mapper.dtoToEntity(playerDTO);
         playerService.savePlayer(player);
-        playerDTO.setPk_playerID(player.getPk_playerID());
+        playerDTO.setId(player.getPk_playerID());
         return new ResponseEntity<>(playerDTO, HttpStatus.CREATED);
     }
 
     @PutMapping
-    private ResponseEntity<PlayerDTO> updatePlayer(@RequestBody PlayerDTO playerDTO, String name){
-        if (playerDTO.getPk_playerID() != null){
+    public ResponseEntity<PlayerDTO> updatePlayer(@RequestBody PlayerDTO playerDTO, String name){
+        if (playerDTO.getId() != null){
             playerDTO.setName(name);
-            Player player = EntityDTOSwapper.DTOtoEntityWID(playerDTO);
+            Player player = mapper.dtoToEntityWID(playerDTO);
             playerService.savePlayer(player);
             return new ResponseEntity<>(playerDTO, HttpStatus.OK);
         }
-        return addPlayer(playerDTO);
+        return signUp(playerDTO);
     }
 
     @GetMapping("/")
-    private ResponseEntity<List<PlayerDTO>> allPSuccessPercentage(){
+    public ResponseEntity<List<PlayerDTO>> allPSuccessPercentage(){
         return new ResponseEntity<>(playerService.playerSuccessList(), HttpStatus.OK);
     }
 
     @GetMapping("/ranking")
-    private ResponseEntity<List<PlayerDTO>> getRanking(){
+    public ResponseEntity<List<PlayerDTO>> getRanking(){
         List<PlayerDTO> playerDTOS = playerService
                 .rearrangeToWinningPositionsFirst(playerService.playerSuccessList());
         return new ResponseEntity<>(playerDTOS, HttpStatus.OK);
     }
 
     @GetMapping("/ranking/loser")
-    private ResponseEntity<PlayerDTO> getMostLoser(){
+    public ResponseEntity<PlayerDTO> getMostLoser(){
         List<PlayerDTO> playerDTOS = getRanking().getBody();
         assert playerDTOS != null;
         return new ResponseEntity<>(playerDTOS.get(playerDTOS.size()-1), HttpStatus.OK);
     }
 
     @GetMapping("/ranking/winner")
-    private ResponseEntity<PlayerDTO> getMostWinner(){
+    public ResponseEntity<PlayerDTO> getMostWinner(){
         List<PlayerDTO> playerDTOS = getRanking().getBody();
         assert playerDTOS != null;
         return new ResponseEntity<>(playerDTOS.get(0), HttpStatus.OK);

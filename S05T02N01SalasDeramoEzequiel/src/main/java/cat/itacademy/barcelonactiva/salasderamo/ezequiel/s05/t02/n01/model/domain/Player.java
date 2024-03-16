@@ -16,13 +16,13 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long pk_playerID;
-    @Column(name = "name", unique = true)
+    @Column(name = "name", unique = true, nullable = true)
     private String name;
-    @Column(name = "user", unique = true)
+    @Column(name = "user", unique = true, nullable = false)
     private String user;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "creationDate")
+    @Column(name = "creationDate", nullable = false)
     private LocalDateTime creationDate;
 
 

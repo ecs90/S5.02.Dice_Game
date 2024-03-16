@@ -1,7 +1,7 @@
 package cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.controllers;
 
 import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.domain.Match;
-import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.service.MatchService;
+import cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.service.interfaces.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +13,13 @@ import java.util.List;
 DELETE /players/{id}/games: elimina les tirades del jugador/a.
 GET /players/{id}/games: retorna el llistat de jugades per un jugador/a.*/
 @RestController
-@RequestMapping(name = "/players/{id}/games")
+@RequestMapping("/players/{id}/games")
 public class MatchController {
     @Autowired
     private MatchService matchService;
 
     @PostMapping("/")
-    private ResponseEntity<Match> throwDice(@PathVariable Long id){
+    public ResponseEntity<Match> throwDice(@PathVariable Long id){
         Match match = new Match(id);
         match = matchService.throwDice(match);
         matchService.saveMatch(match);
@@ -27,13 +27,13 @@ public class MatchController {
     }
 
     @DeleteMapping
-    private ResponseEntity<Void> deleteMatches(@PathVariable Long id){
+    public ResponseEntity<Void> deleteMatches(@PathVariable Long id){
         matchService.deleteMatches(id);
         return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
     }
 
     @GetMapping
-    private ResponseEntity<List<Match>> readMatches(@PathVariable Long id){
+    public ResponseEntity<List<Match>> readMatches(@PathVariable Long id){
         List<Match> matches = matchService.findByPlayerId(id);
         return new ResponseEntity<>(matches, HttpStatus.OK);
     }
