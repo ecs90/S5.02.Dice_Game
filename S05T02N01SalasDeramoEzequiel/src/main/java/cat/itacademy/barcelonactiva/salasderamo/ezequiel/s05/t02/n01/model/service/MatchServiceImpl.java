@@ -30,7 +30,7 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public void deleteMatches(Long id) {
-        matchRepository.deleteAll(findByPlayerId(id));
+        matchRepository.deleteByPlayerID(id);
     }
 
     @Override
@@ -40,10 +40,10 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public float calculateSuccessRate(long playerID){
-        long result = 0;
+        float result = 0;
         int playersSize = matchRepository.findByPlayerID(playerID).size();
         if (playersSize != 0){
-            result = countVictories(playerID) / playersSize;
+            result = countVictories(playerID) / (float) playersSize;
         }
 
         return result;

@@ -14,5 +14,5 @@ public class MatchDTO {
     int score;
     int dice1;
     int dice2;
-
+//TODO refactorizar codigo para que controller use DTO
 }

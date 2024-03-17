@@ -20,6 +20,6 @@ public class EntityDTOSMapper {
     public PlayerDTO entityToDTO(Player player, Float successRate){
         return new PlayerDTO(player.getPk_playerID(), player.getName(),
                 player.getUser(), player.getPassword(), player.getCreationDate(),
-                null, null);
+                successRate, null);
     }
 }

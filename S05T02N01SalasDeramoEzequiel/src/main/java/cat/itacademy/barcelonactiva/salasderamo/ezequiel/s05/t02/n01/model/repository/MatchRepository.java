@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface MatchRepository extends MongoRepository<Match, Long> {
 
+    int deleteByPlayerID(long playerID);
     List<Match> findByPlayerID(long playerID);
 }

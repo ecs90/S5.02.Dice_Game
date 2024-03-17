@@ -30,19 +30,21 @@ public class PlayerController {
     public ResponseEntity<PlayerDTO> signUp(@RequestBody PlayerDTO playerDTO){
         Player player = mapper.dtoToEntity(playerDTO);
         playerService.savePlayer(player);
-        playerDTO.setId(player.getPk_playerID());
-        return new ResponseEntity<>(playerDTO, HttpStatus.CREATED);
+        PlayerDTO newPlayerDTO = mapper.entityToDTO(player, null);
+        return new ResponseEntity<>(newPlayerDTO, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<PlayerDTO> updatePlayer(@RequestBody PlayerDTO playerDTO, String name){
+    public ResponseEntity<PlayerDTO> updatePlayer(@RequestBody PlayerDTO playerDTO) throws IllegalArgumentException{
+        Player player;
         if (playerDTO.getId() != null){
-            playerDTO.setName(name);
-            Player player = mapper.dtoToEntityWID(playerDTO);
-            playerService.savePlayer(player);
-            return new ResponseEntity<>(playerDTO, HttpStatus.OK);
+            player = mapper.dtoToEntityWID(playerDTO);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        return signUp(playerDTO);
+        playerService.savePlayer(player);
+        PlayerDTO newPlayerDTO = mapper.entityToDTO(player, null);
+        return new ResponseEntity<>(newPlayerDTO, HttpStatus.OK);
     }
 
     @GetMapping("/")

@@ -1,5 +1,6 @@
 package cat.itacademy.barcelonactiva.salasderamo.ezequiel.s05.t02.n01.model.domain;
 
+import jakarta.persistence.GeneratedValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "match")
 public class Match {
     @Id
-    long matchID;
+    @GeneratedValue
+    String matchID;
     boolean win;
     long playerID;
     int score;
